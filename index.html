@@ -41,7 +41,7 @@
         /* Увеличенное окно терминала Linux */
         .linux-window {
             width: 90%;
-            max-width: 480px; /* Сделали шире и массивнее */
+            max-width: 480px; /* Было 320px, стало 480px — теперь оно крупное */
             background: #1e1e1e;
             border-radius: 12px;
             box-shadow: 0 25px 60px rgba(0, 0, 0, 0.85), 0 0 25px rgba(138, 43, 226, 0.25);
@@ -51,7 +51,7 @@
         }
 
         @keyframes windowAppear {
-            from { transform: scale(0.8); opacity: 0; }
+            from { transform: scale(0.85); opacity: 0; }
             to { transform: scale(1); opacity: 1; }
         }
 
@@ -73,8 +73,8 @@
         }
 
         .win-btn {
-            width: 12px;
-            height: 12px;
+            width: 13px;
+            height: 13px;
             border-radius: 50%;
             display: inline-block;
             cursor: pointer;
@@ -103,20 +103,20 @@
             position: absolute;
             left: 50%;
             transform: translateX(-50%);
-            font-size: 11px;
+            font-size: 12px;
             font-family: monospace;
             color: #666;
             letter-spacing: 1px;
         }
 
-        /* Просторный контент внутри окна */
+        /* Контент внутри увеличенного окна */
         .window-content {
-            padding: 65px 40px; /* Увеличили отступы вокруг цифр */
+            padding: 60px 40px; /* Сделали просторнее, чтобы код выделялся */
             text-align: center;
             background: #141414;
         }
 
-        /* Крупный светящийся код 2347 с фиксированной высотой */
+        /* Анимированный светящийся код 2347 */
         .terminal-code {
             font-family: 'Courier New', Courier, monospace;
             font-size: 56px; /* Увеличили размер шрифта */
@@ -124,8 +124,8 @@
             color: #ffffff;
             letter-spacing: 6px;
             margin: 0;
+            min-height: 65px; /* Фиксирует высоту, чтобы окно не дергалось при анимации */
             text-shadow: 0 0 15px rgba(255, 255, 255, 0.3), 0 0 30px rgba(138, 43, 226, 0.4);
-            min-height: 65px; /* Чтобы окно не прыгало во время анимации */
         }
 
         /* Класс скрытия прелоадера */
@@ -192,7 +192,7 @@
             z-index: -1;
         }
 
-        /* Контейнер сайта с измененной логикой появления */
+        /* Контейнер сайта с измененной логикой появления (через JS класс) */
         .bio-container {
             background: rgba(20, 20, 20, 0.65);
             backdrop-filter: blur(20px);
@@ -316,3 +316,392 @@
 
         .bio-link {
             display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 14px;
+            background-color: rgba(30, 30, 30, 0.8);
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(138, 43, 226, 0.3);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+        }
+
+        .bio-link i {
+            font-size: 18px;
+            transition: transform 0.3s ease;
+        }
+
+        .bio-link i.fa-shield-halved {
+            color: #ba55d3;
+        }
+
+        .bio-link:hover {
+            background-color: #8a2be2;
+            color: #ffffff;
+            border-color: #ba55d3;
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 8px 20px rgba(138, 43, 226, 0.5);
+        }
+
+        .bio-link:hover i {
+            transform: scale(1.15) rotate(-5deg);
+        }
+        
+        .bio-link:active {
+            transform: translateY(-1px) scale(0.99);
+        }
+
+        /* --- СТИЛИ АУДИОПЛЕЕРА --- */
+        .player-container {
+            background: rgba(25, 25, 25, 0.85);
+            border: 1px solid rgba(138, 43, 226, 0.4);
+            border-radius: 16px;
+            padding: 14px 15px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            text-align: left;
+            margin-top: 10px;
+            position: relative;
+        }
+
+        .track-cover {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #8a2be2;
+            flex-shrink: 0;
+            transition: transform 0.3s ease;
+        }
+
+        .track-cover.rotating {
+            animation: rotateAlbum 8s linear infinite;
+        }
+
+        @keyframes rotateAlbum {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .track-info {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .track-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: #ffffff;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .track-artist {
+            font-size: 11px;
+            color: #aaa;
+            margin-bottom: 5px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            cursor: pointer;
+            position: relative;
+            margin-bottom: 3px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: #8a2be2;
+            border-radius: 10px;
+            transition: width 0.1s linear;
+            box-shadow: 0 0 8px #8a2be2;
+        }
+
+        .time-info {
+            font-size: 10px;
+            color: #888;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .play-btn {
+            background: #8a2be2;
+            border: none;
+            color: white;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 12px;
+            flex-shrink: 0;
+            transition: transform 0.2s ease, background 0.2s ease;
+            box-shadow: 0 0 10px rgba(138, 43, 226, 0.4);
+            animation: pulsePlayBtn 2s infinite;
+        }
+
+        @keyframes pulsePlayBtn {
+            0% { box-shadow: 0 0 0 0 rgba(138, 43, 226, 0.6); }
+            70% { box-shadow: 0 0 0 8px rgba(138, 43, 226, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(138, 43, 226, 0); }
+        }
+
+        .play-btn:hover {
+            transform: scale(1.1);
+            background: #9400d3;
+        }
+
+        /* Футер */
+        .footer {
+            margin-top: 30px;
+            font-size: 12px;
+            color: #888;
+            font-weight: 500;
+        }
+
+        .heart {
+            color: #8a2be2;
+            display: inline-block;
+            animation: heartbeat 1.5s infinite;
+            text-shadow: 0 0 5px #8a2be2;
+        }
+
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            30% { transform: scale(1.15); }
+            40% { transform: scale(1); }
+            60% { transform: scale(1.15); }
+            100% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="preloader">
+        <div class="linux-window">
+            <div class="window-header">
+                <div class="window-buttons">
+                    <div class="win-btn close" id="closeLinuxBtn" title="Закрыть и войти"></div>
+                    <div class="win-btn minimize"></div>
+                    <div class="win-btn maximize"></div>
+                </div>
+                <div class="window-title">terminal</div>
+            </div>
+            <div class="window-content">
+                <p class="terminal-code" id="hackerCode">####</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="ash-container"></div>
+
+    <audio id="bgMusic" loop>
+        <source src="music.mp3" type="audio/mpeg">
+    </audio>
+
+    <video autoplay loop muted playsinline class="video-bg">
+        <source src="background.mp4" type="video/mp4">
+    </video>
+
+    <div class="overlay"></div>
+
+    <div class="bio-container" id="mainBioCard">
+        <img src="avatar.jpg" alt="sematary" class="avatar">
+
+        <div class="glitch-title">GHOSTmountain</div>
+        <p class="subtitle">GHOST</p>
+
+        <div class="links-wrapper">
+            <a href="https://vk.com/aferist2347" target="_blank" class="bio-link">
+                <i class="fab fa-vk"></i> VK link
+            </a>
+            <a href="https://t.me/awert1top" target="_blank" class="bio-link">
+                <i class="fab fa-telegram-plane"></i> My BIO (tg)
+            </a>
+            <a href="https://t.me/GHOSTmountain2347" target="_blank" class="bio-link">
+                <i class="fab fa-telegram-plane"></i> My account
+            </a>
+            <a href="https://t.me/psyhotropi" target="_blank" class="bio-link">
+                <i class="fas fa-shield-halved"></i> My DEF
+            </a>
+        </div>
+
+        <div class="player-container">
+            <img src="track-cover.jpg" alt="Обложка" class="track-cover" id="trackCover">
+            
+            <div class="track-info">
+                <div class="track-name" id="trackName">digital hallucination</div>
+                <div class="track-artist" id="trackArtist">Or3o,Lizzie Freeman</div>
+                
+                <div class="progress-bar-container" id="progressContainer">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                
+                <div class="time-info">
+                    <span id="currentTime">0:00</span>
+                    <span id="durationTime">0:00</span>
+                </div>
+            </div>
+            
+            <button class="play-btn" id="playBtn">▶</button>
+        </div>
+
+        <div class="footer">
+            @GHOSTmountain2347 <span class="heart">❤️</span> 2026
+        </div>
+    </div>
+
+    <script>
+        // --- ХАКЕРСКАЯ АНИМАЦИЯ ДЛЯ КОДА 2347 ---
+        function startCodeHackAnimation() {
+            const codeElement = document.getElementById('hackerCode');
+            const targetText = "2347"; // Итоговое значение
+            const chars = "@#$%!?*&+-=<>_.,"; // Символы для «шума»
+            let iterations = 0;
+            
+            const interval = setInterval(() => {
+                codeElement.innerText = targetText
+                    .split("")
+                    .map((letter, index) => {
+                        // Если перебор для текущей цифры закончен — фиксируем её
+                        if (index < iterations) {
+                            return targetText[index];
+                        }
+                        // Иначе крутим случайный символ
+                        return chars[Math.floor(Math.random() * chars.length)];
+                    })
+                    .join("");
+                
+                // Скорость расшифровки (чем меньше шаг, тем дольше идет перебор)
+                iterations += 1 / 4; 
+                
+                if (iterations >= targetText.length + 1) {
+                    clearInterval(interval);
+                    codeElement.innerText = targetText; // Четко фиксируем финал
+                }
+            }, 50); // Интервал обновления в миллисекундах
+        }
+
+        // Запуск перебора сразу при загрузке структуры документа
+        window.addEventListener('DOMContentLoaded', () => {
+            startCodeHackAnimation();
+        });
+
+        // --- ЛОГИКА ДЛЯ LINUX ОКНА (ВХОД НА САЙТ) ---
+        const preloader = document.getElementById('preloader');
+        const closeLinuxBtn = document.getElementById('closeLinuxBtn');
+        const mainBioCard = document.getElementById('mainBioCard');
+
+        closeLinuxBtn.addEventListener('click', () => {
+            // Плавно прячем черную заставку с окном
+            preloader.classList.add('fade-out');
+            
+            // С небольшой задержкой плавно выкатываем основную карточку
+            setTimeout(() => {
+                mainBioCard.classList.add('visible');
+            }, 150);
+        });
+
+        // --- СКРИПТ ЭФФЕКТА ПЕПЛА ---
+        const ashContainer = document.getElementById('ash-container');
+        const maxParticles = 35;
+
+        function createAshParticle() {
+            const particle = document.createElement('div');
+            particle.classList.add('ash-particle');
+            
+            const size = Math.random() * 5 + 2; 
+            const left = Math.random() * 100; 
+            const duration = Math.random() * 6 + 4; 
+            const delay = Math.random() * 5; 
+            
+            particle.style.width = `${size}px`;
+            particle.style.height = `${size}px`;
+            particle.style.left = `${left}%`;
+            particle.style.animationDuration = `${duration}s`;
+            particle.style.animationDelay = `${delay}s`;
+            
+            ashContainer.appendChild(particle);
+
+            setTimeout(() => {
+                particle.remove();
+                createAshParticle();
+            }, (duration + delay) * 1000);
+        }
+
+        for (let i = 0; i < maxParticles; i++) {
+            createAshParticle();
+        }
+
+        // --- СКРИПТ ПЛЕЕРА ---
+        const music = document.getElementById('bgMusic');
+        const playBtn = document.getElementById('playBtn');
+        const progressFill = document.getElementById('progressFill');
+        const progressContainer = document.getElementById('progressContainer');
+        const currentTimeEl = document.getElementById('currentTime');
+        const durationTimeEl = document.getElementById('durationTime');
+        const trackCover = document.getElementById('trackCover');
+
+        function formatTime(seconds) {
+            if (isNaN(seconds)) return "0:00";
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+        }
+
+        playBtn.addEventListener('click', () => {
+            if (music.paused) {
+                music.play();
+                playBtn.textContent = '⏸';
+                trackCover.classList.add('rotating');
+            } else {
+                music.pause();
+                playBtn.textContent = '▶';
+                trackCover.classList.remove('rotating');
+            }
+        });
+
+        music.addEventListener('timeupdate', () => {
+            const { duration, currentTime } = music;
+            if (duration) {
+                const progressPercent = (currentTime / duration) * 100;
+                progressFill.style.width = `${progressPercent}%`;
+                currentTimeEl.textContent = formatTime(currentTime);
+                durationTimeEl.textContent = formatTime(duration);
+            }
+        });
+
+        music.addEventListener('loadedmetadata', () => {
+            durationTimeEl.textContent = formatTime(music.duration);
+        });
+
+        progressContainer.addEventListener('click', (e) => {
+            const width = progressContainer.clientWidth;
+            const clickX = e.offsetX;
+            const duration = music.duration;
+            if (duration) {
+                music.currentTime = (clickX / width) * duration;
+            }
+        });
+    </script>
+
+</body>
+</html>
