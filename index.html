@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BIO GHOSTmountain</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         /* Общие настройки страницы */
         body {
@@ -32,6 +33,38 @@
             transform: translate(-50%, -50%);
             object-fit: cover;
             filter: blur(5px) brightness(60%); 
+        }
+
+        /* Контейнер для эффекта падающего пепла */
+        #ash-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .ash-particle {
+            position: absolute;
+            background: rgba(150, 150, 150, 0.35);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: fall linear infinite;
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(-10px) translateX(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% {
+                transform: translateY(105vh) translateX(70px) rotate(360deg);
+                opacity: 0;
+            }
         }
 
         /* Затемняющий слой поверх видео для мрачной атмосферы */
@@ -63,6 +96,7 @@
             opacity: 0;
             transform: translateY(30px);
             animation: fadeInPage 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+            z-index: 2;
         }
 
         @keyframes fadeInPage {
@@ -83,13 +117,75 @@
             margin-bottom: 20px;
         }
 
-        /* Заголовки */
-        h1 {
+        /* --- ЭФФЕКТ ГЛИТЧА ДЛЯ ЗАГОЛОВКА --- */
+        .glitch-title {
             font-size: 26px;
+            font-weight: bold;
             margin: 10px 0;
             color: #ffffff;
             letter-spacing: 1px;
+            position: relative;
             text-shadow: 0 2px 10px rgba(138, 43, 226, 0.5);
+        }
+
+        .glitch-title::before,
+        .glitch-title::after {
+            content: "GHOSTmountain";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: transparent;
+        }
+
+        .glitch-title::before {
+            left: 2px;
+            text-shadow: -2px 0 #ff00ff;
+            clip: rect(44px, 450px, 56px, 0);
+            animation: glitch-anim 5s infinite linear alternate-reverse;
+        }
+
+        .glitch-title::after {
+            left: -2px;
+            text-shadow: -2px 0 #00ffff, 0 2px 3px rgba(0,0,0,0.3);
+            clip: rect(85px, 450px, 140px, 0);
+            animation: glitch-anim2 5s infinite linear alternate-reverse;
+        }
+
+        /* Усиление эффекта шума при наведении мышки */
+        .glitch-title:hover::before {
+            animation: glitch-anim 0.3s infinite linear alternate-reverse;
+        }
+        .glitch-title:hover::after {
+            animation: glitch-anim2 0.3s infinite linear alternate-reverse;
+        }
+
+        @keyframes glitch-anim {
+            0% { clip: rect(31px, 9999px, 94px, 0); }
+            10% { clip: rect(112px, 9999px, 76px, 0); }
+            20% { clip: rect(85px, 9999px, 5px, 0); }
+            30% { clip: rect(27px, 9999px, 115px, 0); }
+            40% { clip: rect(73px, 9999px, 29px, 0); }
+            50% { clip: rect(118px, 9999px, 142px, 0); }
+            60% { clip: rect(9px, 9999px, 53px, 0); }
+            70% { clip: rect(67px, 9999px, 122px, 0); }
+            80% { clip: rect(36px, 9999px, 81px, 0); }
+            90% { clip: rect(141px, 9999px, 18px, 0); }
+            100% { clip: rect(55px, 9999px, 100px, 0); }
+        }
+
+        @keyframes glitch-anim2 {
+            0% { clip: rect(76px, 9999px, 116px, 0); }
+            11% { clip: rect(22px, 9999px, 59px, 0); }
+            22% { clip: rect(122px, 9999px, 6px, 0); }
+            33% { clip: rect(9px, 9999px, 84px, 0); }
+            44% { clip: rect(83px, 9999px, 134px, 0); }
+            55% { clip: rect(3px, 9999px, 42px, 0); }
+            66% { clip: rect(110px, 9999px, 120px, 0); }
+            77% { clip: rect(45px, 9999px, 95px, 0); }
+            88% { clip: rect(29px, 9999px, 149px, 0); }
+            100% { clip: rect(68px, 9999px, 33px, 0); }
         }
 
         p.subtitle {
@@ -109,7 +205,10 @@
         }
 
         .bio-link {
-            display: block;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px; /* Отступ между иконкой и текстом */
             padding: 14px;
             background-color: rgba(30, 30, 30, 0.8);
             color: #ffffff;
@@ -121,6 +220,17 @@
             box-shadow: 0 4px 6px rgba(0,0,0,0.2);
         }
 
+        /* Эффект легкого увеличения иконок при наведении */
+        .bio-link i {
+            font-size: 18px;
+            transition: transform 0.3s ease;
+        }
+
+        /* Кастомный фиолетовый цвет для иконки DEF */
+        .bio-link i.fa-shield-halved {
+            color: #ba55d3;
+        }
+
         /* Крутая динамическая анимация при наведении на кнопки */
         .bio-link:hover {
             background-color: #8a2be2;
@@ -128,6 +238,10 @@
             border-color: #ba55d3;
             transform: translateY(-4px) scale(1.02);
             box-shadow: 0 8px 20px rgba(138, 43, 226, 0.5);
+        }
+
+        .bio-link:hover i {
+            transform: scale(1.15) rotate(-5deg);
         }
         
         /* Эффект нажатия для телефонов */
@@ -278,6 +392,8 @@
 </head>
 <body>
 
+    <div id="ash-container"></div>
+
     <audio id="bgMusic" loop>
         <source src="music.mp3" type="audio/mpeg">
     </audio>
@@ -291,14 +407,22 @@
     <div class="bio-container">
         <img src="avatar.jpg" alt="sematary" class="avatar">
 
-        <h1>GHOSTmountain</h1>
+        <div class="glitch-title">GHOSTmountain</div>
         <p class="subtitle">GHOST</p>
 
         <div class="links-wrapper">
-            <a href="https://vk.com/aferist2347" target="_blank" class="bio-link">VK link</a>
-            <a href="https://t.me/awert1top" target="_blank" class="bio-link">My BIO (tg)</a>
-            <a href="https://t.me/GHOSTmountain2347" target="_blank" class="bio-link">My account</a>
-            <a href="https://t.me/psyhotropi" target="_blank" class="bio-link">My DEF</a>
+            <a href="https://vk.com/aferist2347" target="_blank" class="bio-link">
+                <i class="fab fa-vk"></i> VK link
+            </a>
+            <a href="https://t.me/awert1top" target="_blank" class="bio-link">
+                <i class="fab fa-telegram-plane"></i> My BIO (tg)
+            </a>
+            <a href="https://t.me/GHOSTmountain2347" target="_blank" class="bio-link">
+                <i class="fab fa-telegram-plane"></i> My account
+            </a>
+            <a href="https://t.me/psyhotropi" target="_blank" class="bio-link">
+                <i class="fas fa-shield-halved"></i> My DEF
+            </a>
         </div>
 
         <div class="player-container">
@@ -327,6 +451,40 @@
     </div>
 
     <script>
+        // --- СКРИПТ ЭФФЕКТА ПЕПЛА ---
+        const ashContainer = document.getElementById('ash-container');
+        const maxParticles = 35; // Количество частичек пепла на экране одновременно
+
+        function createAshParticle() {
+            const particle = document.createElement('div');
+            particle.classList.add('ash-particle');
+            
+            const size = Math.random() * 5 + 2; // размер от 2px до 7px
+            const left = Math.random() * 100; // случайная позиция по ширине
+            const duration = Math.random() * 6 + 4; // скорость падения от 4с до 10с
+            const delay = Math.random() * 5; // случайная задержка перед стартом
+            
+            particle.style.width = `${size}px`;
+            particle.style.height = `${size}px`;
+            particle.style.left = `${left}%`;
+            particle.style.animationDuration = `${duration}s`;
+            particle.style.animationDelay = `${delay}s`;
+            
+            ashContainer.appendChild(particle);
+
+            // Удаляем частицу после завершения падения и создаем новую на замену
+            setTimeout(() => {
+                particle.remove();
+                createAshParticle();
+            }, (duration + delay) * 1000);
+        }
+
+        // Запуск генерации частиц
+        for (let i = 0; i < maxParticles; i++) {
+            createAshParticle();
+        }
+
+        // --- СКРИПТ ПЛЕЕРА ---
         const music = document.getElementById('bgMusic');
         const playBtn = document.getElementById('playBtn');
         const progressFill = document.getElementById('progressFill');
