@@ -38,10 +38,10 @@
             transition: opacity 0.6s ease, visibility 0.6s;
         }
 
-        /* Увеличенное окно терминала Linux */
+        /* Увеличенное окно терминала Linux для вмещения ASCII-арта */
         .linux-window {
-            width: 90%;
-            max-width: 480px; /* Было 320px, стало 480px — теперь оно крупное */
+            width: 95%;
+            max-width: 540px; /* Сделали чуть шире, чтобы массивные цифры не переносились */
             background: #1e1e1e;
             border-radius: 12px;
             box-shadow: 0 25px 60px rgba(0, 0, 0, 0.85), 0 0 25px rgba(138, 43, 226, 0.25);
@@ -111,21 +111,27 @@
 
         /* Контент внутри увеличенного окна */
         .window-content {
-            padding: 60px 40px; /* Сделали просторнее, чтобы код выделялся */
+            padding: 40px 20px; 
             text-align: center;
             background: #141414;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
-        /* Анимированный светящийся код 2347 (Увеличен до 72px) */
+        /* ОГРОМНЫЙ ИЗ СИМВОЛОВ КОД 2347 (Блок для ASCII-арта) */
         .terminal-code {
             font-family: 'Courier New', Courier, monospace;
-            font-size: 72px; /* Увеличили размер шрифта, как ты и просил */
+            font-size: 16px; /* Базовый размер для мелких символов-мозаики */
+            line-height: 1.2;
             font-weight: bold;
             color: #ffffff;
-            letter-spacing: 8px;
-            margin: 0;
-            min-height: 85px; /* Зафиксировали высоту под новый огромный шрифт */
-            text-shadow: 0 0 15px rgba(255, 255, 255, 0.3), 0 0 35px rgba(138, 43, 226, 0.5);
+            white-space: pre; /* Сохраняет структуру строк и пробелов арта */
+            display: inline-block;
+            text-align: left;
+            margin: 0 auto;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.2), 0 0 25px rgba(138, 43, 226, 0.4);
+            letter-spacing: 2px;
         }
 
         /* Класс скрытия прелоадера */
@@ -506,7 +512,7 @@
                 <div class="window-title">terminal</div>
             </div>
             <div class="window-content">
-                <p class="terminal-code" id="hackerCode">####</p>
+                <div class="terminal-code" id="hackerCode"></div>
             </div>
         </div>
     </div>
@@ -570,36 +576,94 @@
     </div>
 
     <script>
-        // --- ПРОКАЧАННАЯ ХАКЕРСКАЯ АНИМАЦИЯ НА 1.5 СЕКУНДЫ ---
+        // --- ДЕТАЛЬНЫЙ ASCII-АРТ ЦИФР 2, 3, 4, 7 ИЗ СИМВОЛОВ МАТРИЦЫ ---
+        // Каждая цифра состоит из 5 строк и содержит по ~20-25 хакерских знаков
+        const digitsASCII = {
+            "2": [
+                " @@@@@? ",
+                "!      @ ",
+                "  $$$$$! ",
+                " #       ",
+                " ####### "
+            ],
+            "3": [
+                " @@@@@@! ",
+                "       $ ",
+                "  &&&&&% ",
+                "       ? ",
+                " @@@@@@+ "
+            ],
+            "4": [
+                " !     # ",
+                " @     $ ",
+                " ####### ",
+                "       % ",
+                "       & "
+            ],
+            "7": [
+                " @@@@@@@ ",
+                "      !  ",
+                "     $   ",
+                "    #    ",
+                "   %     "
+            ]
+        };
+
+        const targetSequence = ["2", "3", "4", "7"];
+        const hackChars = "@#$%!?*&+-=<>_.,[]{}()";
+
+        function renderMatrixFrame(currentStep, totalSteps) {
+            let resultRows = ["", "", "", "", ""];
+            
+            // Проходим по каждой из 4 цифр последовательно
+            targetSequence.forEach((digit, digitIdx) => {
+                const template = digitsASCII[digit];
+                
+                // Рассчитываем, на каком шаге текущая цифра должна окончательно расшифроваться
+                const unlockStep = (totalSteps / targetSequence.length) * (digitIdx + 1);
+                
+                for (let row = 0; row < 5; row++) {
+                    let processedRowStr = "";
+                    const originalRowStr = template[row];
+                    
+                    for (let col = 0; col < originalRowStr.length; col++) {
+                        const char = originalRowStr[col];
+                        
+                        if (char === " ") {
+                            processedRowStr += " "; // Пробелы оставляем пустыми для контура
+                        } else {
+                            // Если шаг прошел порог открытия цифры — фиксируем её оригинальный символ контура
+                            if (currentStep >= unlockStep) {
+                                processedRowStr += char;
+                            } else {
+                                // До этого момента бешено заменяем на случайный хакерский символ
+                                processedRowStr += hackChars[Math.floor(Math.random() * hackChars.length)];
+                            }
+                        }
+                    }
+                    
+                    // Соединяем цифры горизонтально с отступами друг от друга
+                    resultRows[row] += processedRowStr + "   ";
+                }
+            });
+            
+            return resultRows.join("\n");
+        }
+
+        // --- ХАКЕРСКАЯ АНИМАЦИЯ БРУТФОРСА ASCII-АРТА НА 1.5 СЕКУНДЫ ---
         function startCodeHackAnimation() {
             const codeElement = document.getElementById('hackerCode');
-            const targetText = "2347"; // Итоговое значение
-            const chars = "@#$%!?*&+-=<>_.,[]{}()"; // Расширенный список хакерских символов
-            
-            let totalSteps = 35; // Количество шагов для весомого перебора (около 15-20 знаков на место цифры)
+            let totalSteps = 38; // Оптимальное количество кадров перебора
             let currentStep = 0;
             
             const interval = setInterval(() => {
-                codeElement.innerText = targetText
-                    .split("")
-                    .map((letter, index) => {
-                        // Равномерно и по очереди открываем правильные цифры
-                        if (currentStep > (totalSteps / targetText.length) * (index + 1)) {
-                            return targetText[index];
-                        }
-                        // Пока время подбора не вышло — крутим «шум»
-                        return chars[Math.floor(Math.random() * chars.length)];
-                    })
-                    .join("");
-                
+                codeElement.innerText = renderMatrixFrame(currentStep, totalSteps);
                 currentStep++;
                 
-                // Останавливаем брутфорс ровно на 35 шаге (~1.4 - 1.5 секунды)
-                if (currentStep >= totalSteps) {
+                if (currentStep > totalSteps) {
                     clearInterval(interval);
-                    codeElement.innerText = targetText; // Намертво фиксируем финал
                 }
-            }, 40); // 40мс * 35 шагов как раз дают нужные 1.4 - 1.5 секунды затяжной анимации
+            }, 40); // 40мс * 38 шагов = ~1.5 секунды плотного подбора символов
         }
 
         // Запуск перебора сразу при загрузке структуры документа
@@ -613,10 +677,8 @@
         const mainBioCard = document.getElementById('mainBioCard');
 
         closeLinuxBtn.addEventListener('click', () => {
-            // Плавно прячем черную заставку с окном
             preloader.classList.add('fade-out');
             
-            // С небольшой задержкой плавно выкатываем основную карточку
             setTimeout(() => {
                 mainBioCard.classList.add('visible');
             }, 150);
