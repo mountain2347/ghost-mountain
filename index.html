@@ -116,16 +116,16 @@
             background: #141414;
         }
 
-        /* Анимированный светящийся код 2347 */
+        /* Анимированный светящийся код 2347 (Увеличен до 72px) */
         .terminal-code {
             font-family: 'Courier New', Courier, monospace;
-            font-size: 56px; /* Увеличили размер шрифта */
+            font-size: 72px; /* Увеличили размер шрифта, как ты и просил */
             font-weight: bold;
             color: #ffffff;
-            letter-spacing: 6px;
+            letter-spacing: 8px;
             margin: 0;
-            min-height: 65px; /* Фиксирует высоту, чтобы окно не дергалось при анимации */
-            text-shadow: 0 0 15px rgba(255, 255, 255, 0.3), 0 0 30px rgba(138, 43, 226, 0.4);
+            min-height: 85px; /* Зафиксировали высоту под новый огромный шрифт */
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.3), 0 0 35px rgba(138, 43, 226, 0.5);
         }
 
         /* Класс скрытия прелоадера */
@@ -570,34 +570,36 @@
     </div>
 
     <script>
-        // --- ХАКЕРСКАЯ АНИМАЦИЯ ДЛЯ КОДА 2347 ---
+        // --- ПРОКАЧАННАЯ ХАКЕРСКАЯ АНИМАЦИЯ НА 1.5 СЕКУНДЫ ---
         function startCodeHackAnimation() {
             const codeElement = document.getElementById('hackerCode');
             const targetText = "2347"; // Итоговое значение
-            const chars = "@#$%!?*&+-=<>_.,"; // Символы для «шума»
-            let iterations = 0;
+            const chars = "@#$%!?*&+-=<>_.,[]{}()"; // Расширенный список хакерских символов
+            
+            let totalSteps = 35; // Количество шагов для весомого перебора (около 15-20 знаков на место цифры)
+            let currentStep = 0;
             
             const interval = setInterval(() => {
                 codeElement.innerText = targetText
                     .split("")
                     .map((letter, index) => {
-                        // Если перебор для текущей цифры закончен — фиксируем её
-                        if (index < iterations) {
+                        // Равномерно и по очереди открываем правильные цифры
+                        if (currentStep > (totalSteps / targetText.length) * (index + 1)) {
                             return targetText[index];
                         }
-                        // Иначе крутим случайный символ
+                        // Пока время подбора не вышло — крутим «шум»
                         return chars[Math.floor(Math.random() * chars.length)];
                     })
                     .join("");
                 
-                // Скорость расшифровки (чем меньше шаг, тем дольше идет перебор)
-                iterations += 1 / 4; 
+                currentStep++;
                 
-                if (iterations >= targetText.length + 1) {
+                // Останавливаем брутфорс ровно на 35 шаге (~1.4 - 1.5 секунды)
+                if (currentStep >= totalSteps) {
                     clearInterval(interval);
-                    codeElement.innerText = targetText; // Четко фиксируем финал
+                    codeElement.innerText = targetText; // Намертво фиксируем финал
                 }
-            }, 50); // Интервал обновления в миллисекундах
+            }, 40); // 40мс * 35 шагов как раз дают нужные 1.4 - 1.5 секунды затяжной анимации
         }
 
         // Запуск перебора сразу при загрузке структуры документа
