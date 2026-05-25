@@ -94,8 +94,6 @@
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), 0 0 15px rgba(138, 43, 226, 0.15);
             border: 1px solid rgba(255, 255, 255, 0.1);
             box-sizing: border-box;
-            
-            /* Анимация захода */
             opacity: 0;
             transform: translateY(30px);
             animation: fadeInPage 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
@@ -234,7 +232,7 @@
             color: #ba55d3;
         }
 
-        /* Крутая динамическая анимация при наведении на кнопки */
+        /* Анимация при наведении на кнопки */
         .bio-link:hover {
             background-color: #8a2be2;
             color: #ffffff;
@@ -456,16 +454,16 @@
     <script>
         // --- СКРИПТ ЭФФЕКТА ПЕПЛА ---
         const ashContainer = document.getElementById('ash-container');
-        const maxParticles = 35; // Количество частичек пепла на экране одновременно
+        const maxParticles = 35;
 
         function createAshParticle() {
             const particle = document.createElement('div');
             particle.classList.add('ash-particle');
             
-            const size = Math.random() * 5 + 2; // размер от 2px до 7px
-            const left = Math.random() * 100; // случайная позиция по ширине
-            const duration = Math.random() * 6 + 4; // скорость падения от 4с до 10с
-            const delay = Math.random() * 5; // случайная задержка перед стартом
+            const size = Math.random() * 5 + 2; 
+            const left = Math.random() * 100; 
+            const duration = Math.random() * 6 + 4; 
+            const delay = Math.random() * 5; 
             
             particle.style.width = `${size}px`;
             particle.style.height = `${size}px`;
@@ -475,14 +473,12 @@
             
             ashContainer.appendChild(particle);
 
-            // Удаляем частицу после завершения падения и создаем новую на замену
             setTimeout(() => {
                 particle.remove();
                 createAshParticle();
             }, (duration + delay) * 1000);
         }
 
-        // Запуск генерации частиц
         for (let i = 0; i < maxParticles; i++) {
             createAshParticle();
         }
