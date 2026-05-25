@@ -14,11 +14,12 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            color: #4a4a4a;
+            color: #e0e0e0;
             overflow-x: hidden;
+            background-color: #0d0d0d;
         }
 
-        /* Стиль для видео на заднем фоне */
+        /* Стиль для video на заднем фоне */
         .video-bg {
             position: fixed;
             top: 50%;
@@ -30,34 +31,45 @@
             z-index: -2;
             transform: translate(-50%, -50%);
             object-fit: cover;
-            /* Небольшое размытие, чтобы видео не отвлекало от текста */
-            filter: blur(4px) brightness(85%); 
+            filter: blur(5px) brightness(60%); 
         }
 
-        /* Затемняющий слой поверх видео, чтобы добавить романтичный розовый оттенок */
+        /* Затемняющий слой поверх видео для мрачной атмосферы */
         .overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(255, 229, 236, 0.3);
+            background: rgba(13, 13, 13, 0.5);
             z-index: -1;
         }
 
-        /* Контейнер сайта (главная карточка) */
+        /* Контейнер сайта с анимацией плавного появления при заходе */
         .bio-container {
-            background: rgba(255, 255, 255, 0.75);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
+            background: rgba(20, 20, 20, 0.65);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             border-radius: 24px;
             padding: 40px 30px;
             width: 90%;
             max-width: 400px;
             text-align: center;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), 0 0 15px rgba(138, 43, 226, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             box-sizing: border-box;
+            
+            /* Анимация захода */
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInPage 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        @keyframes fadeInPage {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         /* Главное фото/аватар */
@@ -66,24 +78,26 @@
             height: 130px;
             border-radius: 50%;
             object-fit: cover;
-            border: 4px solid #ff85a1;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border: 4px solid #8a2be2;
+            box-shadow: 0 0 20px rgba(138, 43, 226, 0.4);
             margin-bottom: 20px;
         }
 
         /* Заголовки */
         h1 {
-            font-size: 24px;
+            font-size: 26px;
             margin: 10px 0;
-            color: #ff477e;
-            text-shadow: 0 1px 2px rgba(255,255,255,0.8);
+            color: #ffffff;
+            letter-spacing: 1px;
+            text-shadow: 0 2px 10px rgba(138, 43, 226, 0.5);
         }
 
         p.subtitle {
             font-size: 14px;
-            color: #4a4a4a;
+            color: #b0b0b0;
             font-weight: 500;
             margin-bottom: 25px;
+            letter-spacing: 2px;
         }
 
         /* Ссылки-кнопки */
@@ -91,110 +105,189 @@
             display: flex;
             flex-direction: column;
             gap: 15px;
+            margin-bottom: 25px;
         }
 
         .bio-link {
             display: block;
             padding: 14px;
-            background-color: rgba(255, 255, 255, 0.9);
-            color: #ff477e;
+            background-color: rgba(30, 30, 30, 0.8);
+            color: #ffffff;
             text-decoration: none;
             border-radius: 12px;
             font-weight: 600;
-            transition: all 0.3s ease;
-            border: 2px solid #ffb3c6;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(138, 43, 226, 0.3);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
         }
 
-        /* Анимация при наведении */
+        /* Крутая динамическая анимация при наведении на кнопки */
         .bio-link:hover {
-            background-color: #ff477e;
+            background-color: #8a2be2;
             color: #ffffff;
-            border-color: #ff477e;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(255, 71, 126, 0.3);
+            border-color: #ba55d3;
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 8px 20px rgba(138, 43, 226, 0.5);
+        }
+        
+        /* Эффект нажатия для телефонов */
+        .bio-link:active {
+            transform: translateY(-1px) scale(0.99);
         }
 
-        /* Кнопка управления музыкой */
-        .music-btn {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: rgba(255, 255, 255, 0.8);
-            border: 2px solid #ffb3c6;
-            border-radius: 50%;
+        /* --- СТИЛИ АУДИОПЛЕЕРА --- */
+        .player-container {
+            background: rgba(25, 25, 25, 0.85);
+            border: 1px solid rgba(138, 43, 226, 0.4);
+            border-radius: 16px;
+            padding: 14px 15px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            text-align: left;
+            margin-top: 10px;
+            position: relative;
+        }
+
+        .track-cover {
             width: 45px;
             height: 45px;
-            font-size: 20px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #8a2be2;
+            flex-shrink: 0;
+            transition: transform 0.3s ease;
+        }
+
+        /* Вращение обложки при воспроизведении */
+        .track-cover.rotating {
+            animation: rotateAlbum 8s linear infinite;
+        }
+
+        @keyframes rotateAlbum {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .track-info {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .track-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: #ffffff;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .track-artist {
+            font-size: 11px;
+            color: #aaa;
+            margin-bottom: 5px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* Линия прогресса */
+        .progress-bar-container {
+            width: 100%;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            cursor: pointer;
+            position: relative;
+            margin-bottom: 3px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: #8a2be2;
+            border-radius: 10px;
+            transition: width 0.1s linear;
+            box-shadow: 0 0 8px #8a2be2;
+        }
+
+        .time-info {
+            font-size: 10px;
+            color: #888;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        /* Кнопка играть/пауза с пульсацией */
+        .play-btn {
+            background: #8a2be2;
+            border: none;
+            color: white;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
             cursor: pointer;
             display: flex;
             justify-content: center;
             align-items: center;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            transition: all 0.3s ease;
-            z-index: 10;
+            font-size: 12px;
+            flex-shrink: 0;
+            transition: transform 0.2s ease, background 0.2s ease;
+            box-shadow: 0 0 10px rgba(138, 43, 226, 0.4);
+            animation: pulsePlayBtn 2s infinite;
         }
 
-        .music-btn:hover {
+        @keyframes pulsePlayBtn {
+            0% { box-shadow: 0 0 0 0 rgba(138, 43, 226, 0.6); }
+            70% { box-shadow: 0 0 0 8px rgba(138, 43, 226, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(138, 43, 226, 0); }
+        }
+
+        .play-btn:hover {
             transform: scale(1.1);
-            background: #ff477e;
-            color: white;
-            border-color: #ff477e;
-        }
-
-        /* Музыкальная анимация вращения кнопки, когда трек играет */
-        .playing {
-            animation: rotate 4s linear infinite;
-        }
-
-        @keyframes rotate {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
+            background: #9400d3;
         }
 
         /* Футер */
         .footer {
             margin-top: 30px;
             font-size: 12px;
-            color: #ff477e;
+            color: #888;
             font-weight: 500;
         }
 
         .heart {
-            color: #ff477e;
+            color: #8a2be2;
             display: inline-block;
-            animation: heartbeat 1.2s infinite;
+            animation: heartbeat 1.5s infinite;
+            text-shadow: 0 0 5px #8a2be2;
         }
 
         @keyframes heartbeat {
             0% { transform: scale(1); }
-            20% { transform: scale(1.1); }
+            30% { transform: scale(1.15); }
             40% { transform: scale(1); }
-            60% { transform: scale(1.1); }
-            80% { transform: scale(1); }
+            60% { transform: scale(1.15); }
             100% { transform: scale(1); }
         }
     </style>
 </head>
 <body>
 
-    <!-- Кнопка включения/выключения музыки -->
-    <button class="music-btn" id="musicBtn">🎵</button>
-
-    <!-- Тег для аудио-файла (музыка) -->
     <audio id="bgMusic" loop>
         <source src="music.mp3" type="audio/mpeg">
     </audio>
 
-    <!-- Тег для фонового видео -->
     <video autoplay loop muted playsinline class="video-bg">
         <source src="background.mp4" type="video/mp4">
     </video>
 
-    <!-- Полупрозрачный слой поверх видео -->
     <div class="overlay"></div>
 
-    <!-- Основная карточка -->
     <div class="bio-container">
         <img src="avatar.jpg" alt="sematary" class="avatar">
 
@@ -208,25 +301,79 @@
             <a href="https://t.me/psyhotropi" target="_blank" class="bio-link">My DEF</a>
         </div>
 
+        <div class="player-container">
+            <img src="track-cover.jpg" alt="Обложка" class="track-cover" id="trackCover">
+            
+            <div class="track-info">
+                <div class="track-name" id="trackName">digital hallucination</div>
+                <div class="track-artist" id="trackArtist">Or3o,Lizzie Freeman</div>
+                
+                <div class="progress-bar-container" id="progressContainer">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                
+                <div class="time-info">
+                    <span id="currentTime">0:00</span>
+                    <span id="durationTime">0:00</span>
+                </div>
+            </div>
+            
+            <button class="play-btn" id="playBtn">▶</button>
+        </div>
+
         <div class="footer">
             @GHOSTmountain2347 <span class="heart">❤️</span> 2026
         </div>
     </div>
 
-    <!-- Скрипт, который включает и выключает музыку по клику -->
     <script>
         const music = document.getElementById('bgMusic');
-        const btn = document.getElementById('musicBtn');
+        const playBtn = document.getElementById('playBtn');
+        const progressFill = document.getElementById('progressFill');
+        const progressContainer = document.getElementById('progressContainer');
+        const currentTimeEl = document.getElementById('currentTime');
+        const durationTimeEl = document.getElementById('durationTime');
+        const trackCover = document.getElementById('trackCover');
 
-        btn.addEventListener('click', () => {
+        function formatTime(seconds) {
+            if (isNaN(seconds)) return "0:00";
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+        }
+
+        playBtn.addEventListener('click', () => {
             if (music.paused) {
                 music.play();
-                btn.classList.add('playing');
-                btn.textContent = '⏸️'; // Меняем иконку на паузу
+                playBtn.textContent = '⏸';
+                trackCover.classList.add('rotating');
             } else {
                 music.pause();
-                btn.classList.remove('playing');
-                btn.textContent = '🎵'; // Возвращаем ноту
+                playBtn.textContent = '▶';
+                trackCover.classList.remove('rotating');
+            }
+        });
+
+        music.addEventListener('timeupdate', () => {
+            const { duration, currentTime } = music;
+            if (duration) {
+                const progressPercent = (currentTime / duration) * 100;
+                progressFill.style.width = `${progressPercent}%`;
+                currentTimeEl.textContent = formatTime(currentTime);
+                durationTimeEl.textContent = formatTime(duration);
+            }
+        });
+
+        music.addEventListener('loadedmetadata', () => {
+            durationTimeEl.textContent = formatTime(music.duration);
+        });
+
+        progressContainer.addEventListener('click', (e) => {
+            const width = progressContainer.clientWidth;
+            const clickX = e.offsetX;
+            const duration = music.duration;
+            if (duration) {
+                music.currentTime = (clickX / width) * duration;
             }
         });
     </script>
